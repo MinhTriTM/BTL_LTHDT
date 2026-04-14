@@ -25,7 +25,7 @@ export function TopStudentCard({ students }: { students: Student[] }) {
 
   const topStudent = useMemo(() => {
     if (students.length === 0) return null;
-    return [...students].sort((a, b) => b.gpa - a.gpa)[0];
+    return students.reduce((top, student) => (student.gpa > top.gpa ? student : top), students[0]);
   }, [students]);
 
   if (!topStudent) {
