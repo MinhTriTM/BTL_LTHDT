@@ -27,9 +27,26 @@ const GpaCalculationAssistantOutputSchema = z.object({
 });
 export type GpaCalculationAssistantOutput = z.infer<typeof GpaCalculationAssistantOutputSchema>;
 
+
+const gpaCache = new Map<string, Promise<GpaCalculationAssistantOutput>>();
+
 export async function suggestGpaRange(input: GpaCalculationAssistantInput): Promise<GpaCalculationAssistantOutput> {
-  return gpaCalculationAssistantFlow(input);
+  const key = input.grades;
+  if (gpaCache.has(key)) {
+    return gpaCache.get(key)!;
+  }
+  const promise = gpaCalculationAssistantFlow(input);
+  gpaCache.set(key, promise);
+
+  try {
+    await promise;
+  } catch (e) {
+    gpaCache.delete(key);
+    throw e;
+  }
+  return promise;
 }
+
 
 const gpaCalculationAssistantPrompt = ai.definePrompt({
   name: 'gpaCalculationAssistantPrompt',
