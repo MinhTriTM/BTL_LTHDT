@@ -12,13 +12,21 @@ import Image from "next/image";
 
 function getInitials(name: string) {
   if (!name) return "??";
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
+  let initials = "";
+  let isWordStart = true;
+  for (let i = 0; i < name.length; i++) {
+    const char = name[i];
+    if (char === ' ') {
+      isWordStart = true;
+    } else if (isWordStart) {
+      initials += char.toUpperCase();
+      isWordStart = false;
+      if (initials.length === 2) {
+        break;
+      }
+    }
+  }
+  return initials || "??";
 }
 
 export function TopStudentCard({ students }: { students: Student[] }) {
