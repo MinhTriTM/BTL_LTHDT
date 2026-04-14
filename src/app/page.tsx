@@ -83,7 +83,7 @@ export default function Home() {
         });
         return;
       }
-      setStudents([data, ...students].sort((a, b) => a.name.localeCompare(b.name)));
+      setStudents([data, ...students]);
       toast({
         title: "Student Added",
         description: `${data.name} has been added to the list.`,
