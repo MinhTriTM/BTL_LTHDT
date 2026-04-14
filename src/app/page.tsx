@@ -36,10 +36,11 @@ export default function Home() {
 
   const filteredStudents = useMemo(() => {
     if (!searchQuery) return students;
+    const lowerQuery = searchQuery.toLowerCase();
     return students.filter(
       (student) =>
-        student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        student.id.toLowerCase().includes(searchQuery.toLowerCase())
+        student.name.toLowerCase().includes(lowerQuery) ||
+        student.id.toLowerCase().includes(lowerQuery)
     );
   }, [students, searchQuery]);
 
